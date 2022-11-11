@@ -1,5 +1,3 @@
-
-
 String suhu = "027.00";
 String orang = "100.00";
 String suhuAC = "026.00";
