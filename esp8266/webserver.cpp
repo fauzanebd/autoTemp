@@ -5,7 +5,7 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 
-const char* ssid     = "ESP8266-Access-Point";
+const char* ssid     = "ESP8266_Access_Point";
 const char* password = "123456789";
 
 // Create AsyncWebServer object on port 80
@@ -112,17 +112,17 @@ void setupWebserver(float roomtemp, int actemp){
   server.begin();
 }
  
- void updateWebserver(float roomtemp, int actemp) {
-    // Route for root / web page
-  server.update("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/html", index_html, processor);
-  });
-  server.update("/room-temp", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(roomtemp).c_str());
-  });
-  server.update("/ac-temp", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(actemp).c_str());
-  });
-  server.update()
- }
+//  void updateWebserver(float roomtemp, int actemp) {
+//     // Route for root / web page
+//   server.update("/", HTTP_GET, [](AsyncWebServerRequest *request){
+//     request->send_P(200, "text/html", index_html, processor);
+//   });
+//   server.update("/room-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+//     request->send_P(200, "text/plain", String(roomtemp).c_str());
+//   });
+//   server.update("/ac-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+//     request->send_P(200, "text/plain", String(actemp).c_str());
+//   });
+//   server.update()
+//  }
 

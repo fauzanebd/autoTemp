@@ -13,7 +13,6 @@ int actemp = 0;
 void setup() {
     Serial.begin(9600);
 
-    setupWebserver(roomtemp, actemp);
     setupCounter(in_laser, out_laser)
 }
 
@@ -22,6 +21,5 @@ void loop() {
     int occupancy = loopCounter(in_laser, out_laser);
 
     actemp = getTemperature(roomTemp, 10));
-    updateWebserver(roomtemp, actemp);
     delay(1000);
 }
