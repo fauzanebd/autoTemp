@@ -247,7 +247,7 @@ uint16_t rawDataList[RAW_DATA_LIST_LEN][RAW_DATA_LEN] = {
 };
 
    
-int detectTemp(int dht_apin) {
+float detectTemp(int dht_apin) {
   DHT.read22(dht_apin);
   int temp = DHT.temperature;
   return temp;

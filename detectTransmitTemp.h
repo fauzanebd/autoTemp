@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-int detectTemp(int dht_apin);
+float detectTemp(int dht_apin);
 void transmitTemp(int temp, int counter);
 
 #endif

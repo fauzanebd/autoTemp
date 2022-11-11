@@ -8,19 +8,8 @@
 const char* ssid     = "ESP8266-Access-Point";
 const char* password = "123456789";
 
-// current temperature & humidity, updated in loop()
-float t = 0.0;
-float h = 0.0;
-
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
-
-// Generally, you should use "unsigned long" for variables that hold time
-// The value will quickly become too large for an int to store
-//unsigned long previousMillis = 0;    // will store last time DHT was updated
-
-// Updates DHT readings every 10 seconds
-//const long interval = 10000;  
 
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
@@ -36,7 +25,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     h2 { font-size: 3.0rem; }
     p { font-size: 3.0rem; }
     .units { font-size: 1.2rem; }
-    .dht-labels{
+    .temp-labels{
       font-size: 1.5rem;
       vertical-align:middle;
       padding-bottom: 15px;
@@ -44,16 +33,16 @@ const char index_html[] PROGMEM = R"rawliteral(
   </style>
 </head>
 <body>
-  <h2>ESP8266 DHT Server</h2>
+  <h2>AC Automation WebServer</h2>
   <p>
-    <span class="dht-labels">Temperature</span> 
-    <span id="temperature">%TEMPERATURE%</span>
+    <span class="temp-labels">ROOM TEMPERATURE</span> 
+    <span id="room-temp">%ROOM-TEMP%</span>
     <sup class="units">&deg;C</sup>
   </p>
   <p>
-    <span class="dht-labels">Humidity</span>
-    <span id="humidity">%HUMIDITY%</span>
-    <sup class="units">%</sup>
+    <span class="temp-labels">AC TEMPERATURE</span>
+    <span id="ac-temp">%AC-TEMP%</span>
+    <sup class="units">%&deg/sup>
   </p>
 </body>
 <script>
@@ -61,10 +50,10 @@ setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("temperature").innerHTML = this.responseText;
+      document.getElementById("room-temp").innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "/temperature", true);
+  xhttp.open("GET", "/room-temp", true);
   xhttp.send();
 }, 10000 ) ;
 
@@ -72,10 +61,10 @@ setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("humidity").innerHTML = this.responseText;
+      document.getElementById("ac-temp").innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "/humidity", true);
+  xhttp.open("GET", "/ac-temp", true);
   xhttp.send();
 }, 10000 ) ;
 </script>
@@ -84,16 +73,16 @@ setInterval(function ( ) {
 // Replaces placeholder with DHT values
 String processor(const String& var){
   //Serial.println(var);
-  if(var == "TEMPERATURE"){
+  if(var == "ROOM-TEMP"){
     return String(t);
   }
-  else if(var == "HUMIDITY"){
+  else if(var == "AC-TEMP"){
     return String(h);
   }
   return String();
 }
 
-void setup(){
+void setupWebserver(float roomtemp, int actemp){
   // Serial port for debugging purposes
   Serial.begin(115200);
   
@@ -112,20 +101,28 @@ void setup(){
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/html", index_html, processor);
   });
-  server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(t).c_str());
+  server.on("/room-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", String(roomtemp).c_str());
   });
-  server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(h).c_str());
+  server.on("/ac-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", String(actemp).c_str());
   });
 
   // Start server
   server.begin();
 }
  
-void loop(){  
-      t = t+1;
-      Serial.println(t);
-      h = h+1;
-      Serial.println(h);
-}
+ void updateWebserver(float roomtemp, int actemp) {
+    // Route for root / web page
+  server.update("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/html", index_html, processor);
+  });
+  server.update("/room-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", String(roomtemp).c_str());
+  });
+  server.update("/ac-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send_P(200, "text/plain", String(actemp).c_str());
+  });
+  server.update()
+ }
+
