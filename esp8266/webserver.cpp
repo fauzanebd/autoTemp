@@ -4,12 +4,7 @@
 #include <Hash.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
-
-const char* ssid     = "ESP8266_Access_Point";
-const char* password = "123456789";
-
-// Create AsyncWebServer object on port 80
-AsyncWebServer server(80);
+#include "webserver.h"
 
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
@@ -71,46 +66,46 @@ setInterval(function ( ) {
 </html>)rawliteral";
 
 // Replaces placeholder with DHT values
-String processor(const String& var){
+String processor(const String& var, String roomtemp, String actemp){
   //Serial.println(var);
   if(var == "ROOM-TEMP"){
-    return String(t);
+    return String(roomtemp);
   }
   else if(var == "AC-TEMP"){
-    return String(h);
+    return String(actemp);
   }
   return String();
 }
 
-void setupWebserver(float roomtemp, int actemp){
-  // Serial port for debugging purposes
-  Serial.begin(115200);
+// void setupWebserver(float roomtemp, int actemp){
+//   // Serial port for debugging purposes
+//   Serial.begin(115200);
   
-  Serial.print("Setting AP (Access Point)…");
-  // Remove the password parameter, if you want the AP (Access Point) to be open
-  WiFi.softAP(ssid, password);
+//   Serial.print("Setting AP (Access Point)…");
+//   // Remove the password parameter, if you want the AP (Access Point) to be open
+//   WiFi.softAP(ssid, password);
 
-  IPAddress IP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(IP);
+//   IPAddress IP = WiFi.softAPIP();
+//   Serial.print("AP IP address: ");
+//   Serial.println(IP);
 
-  // Print ESP8266 Local IP Address
-  Serial.println(WiFi.localIP());
+//   // Print ESP8266 Local IP Address
+//   Serial.println(WiFi.localIP());
 
-  // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/html", index_html, processor);
-  });
-  server.on("/room-temp", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(roomtemp).c_str());
-  });
-  server.on("/ac-temp", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", String(actemp).c_str());
-  });
+//   // Route for root / web page
+//   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+//     request->send_P(200, "text/html", index_html, processor);
+//   });
+//   server.on("/room-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+//     request->send_P(200, "text/plain", String(roomtemp).c_str());
+//   });
+//   server.on("/ac-temp", HTTP_GET, [](AsyncWebServerRequest *request){
+//     request->send_P(200, "text/plain", String(actemp).c_str());
+//   });
 
-  // Start server
-  server.begin();
-}
+//   // Start server
+//   server.begin();
+// }
  
 //  void updateWebserver(float roomtemp, int actemp) {
 //     // Route for root / web page
@@ -125,4 +120,3 @@ void setupWebserver(float roomtemp, int actemp){
 //   });
 //   server.update()
 //  }
-

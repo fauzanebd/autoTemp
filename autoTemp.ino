@@ -1,25 +1,48 @@
 #include "fuzzy_logic.h"
 #include "detectTransmitTemp.h"
-#include "webserver.h"
 #include "peopleCounter.h"
+#include "sendToEsp.h"
 
+#include <SoftwareSerial.h>
 
+//DHT related pin
+#define dht_apin A0 // Analog Pin sensor is connected to
+
+//laser related pin
 int in_laser = 10;
 int out_laser = 11;
-float roomtemp = 0;
-int actemp = 0;
+
+//IR related pin
+
+//ESP Connn related pin
+int rx_esp = 2;
+int tx_esp = 3;
+SoftwareSerial NanoSerial(rx_esp, tx_esp); // RX | TX
+
+
+//other variables
+float roomTemp = 0;
+float acTemp = 0;
 
 
 void setup() {
-    Serial.begin(9600);
+    //laser setup
+    pinMode(in_laser, INPUT);
+    pinMode(out_laser, INPUT);
 
-    setupCounter(in_laser, out_laser)
+    //ESP Conn setup
+    pinMode(rx_esp,INPUT);
+    pinMode(tx_esp,OUTPUT);
+    NanoSerial.begin(57600);
+
+
+    Serial.begin(9600);
 }
 
 void loop() {
     roomTemp = detectTemp();
     int occupancy = loopCounter(in_laser, out_laser);
-
-    actemp = getTemperature(roomTemp, 10));
+    acTemp = getTemperature(roomTemp, occupancy);
+    transmitTemp(acTemp, occupancy);
     delay(1000);
 }

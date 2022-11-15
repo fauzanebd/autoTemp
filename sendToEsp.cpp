@@ -1,34 +1,37 @@
-String suhu = "027.00";
-String orang = "100.00";
-String suhuAC = "026.00";
+String  roomTemp_send = "027.00";
+String  counter_send = "100.00";
+String acTemp_send = "026.00";
 
 #include <SoftwareSerial.h>
+#include <Arduino.h>
+#include "sendToEsp.h"
 
-SoftwareSerial NanoSerial(2, 3); // RX | TX
 
-void setup(){
-  pinMode(2,INPUT);
-  pinMode(3,OUTPUT);
-  
-  Serial.begin(9600);
-  NanoSerial.begin(57600);
-}
-
-void loop(){
-//  Serial.print(suhu); Serial.print("\t");
+void sendToESP(int occupancy, float roomtemp, float acTemp){
+//  Serial.print(roomtemp); Serial.print("\t");
 //  Serial.println(orang); Serial.print("\t");
-//  Serial.print(suhuAC);
-  
-  // String dataAll = String(orang) + "," + String(suhuAC);
-  // Serial.println(dataAll);
+//  Serial.print(acTemp);
+ 
+ // String dataAll = String(orang) + "," + String(acTemp);
+ // Serial.println(dataAll);
 
-  Serial.print(orang); Serial.print("\t");
-  Serial.print(suhu); Serial.print("\t");
-  Serial.println(suhuAC);
+  if (occupancy < 10){
+      counter_send = "00" + String(occupancy) + ".00";
+  }
+  else {
+      counter_send = "0" +String(occupancy) + ".00";
+  }
   
-  NanoSerial.print(orang); NanoSerial.print("%");
-  NanoSerial.print(suhu); NanoSerial.print("%");
-  NanoSerial.print(suhuAC); NanoSerial.print("\n");
-  
-  delay(100);
+  acTemp_send = "0" + String(acTemp) + ".00";
+  roomTemp_send = "0" +String(roomTemp) +".00";
+
+ Serial.print(counter_send); Serial.print("\t");
+ Serial.print(roomTemp_send); Serial.print("\t");
+ Serial.println(acTemp_send);
+ 
+ NanoSerial.print(counter_send); NanoSerial.print("%");
+ NanoSerial.print(roomtemp_send); NanoSerial.print("%");
+ NanoSerial.print(acTemp_send); NanoSerial.print("\n");
+ 
+ delay(100);
 }

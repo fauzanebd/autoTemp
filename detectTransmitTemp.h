@@ -4,6 +4,6 @@
 #include <Arduino.h>
 
 float detectTemp(int dht_apin);
-void transmitTemp(int temp, int counter);
+void transmitTemp(float acTemp, int counter);
 
 #endif
