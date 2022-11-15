@@ -1,20 +1,15 @@
 #include "fuzzy_logic.h"
 
-float temp, occupancy;
-float sangatRendah, rendah, tinggi, sangatTinggi;
-float sedikit, sedang, banyak;
-float normal, sejuk, dingin;
-// float outNormal, outSejuk, outDingin;
-float rule1, rule2a, rule2b, rule3;
-
-unsigned char tempSangatRendah(){
+float tempSangatRendah(int temp){
+    float sangatRendah;
     if (temp <= 10) {sangatRendah = 1;}
     else if (temp >= 10 && temp <= 15) {sangatRendah = (15 - temp) / 15;}
     else if (temp >= 15) {sangatRendah = 0;}
     return sangatRendah;
 }
 
-unsigned char tempRendah(){
+float tempRendah(int temp){
+    float rendah;
     if (temp >= 10 && temp <= 15) {rendah = (temp - 10) / 5;}
     else if (temp >= 15 && temp <= 25) {rendah = 1;}
     else if (temp >= 25 && temp <= 30) {rendah = (30 - temp) / 5;}
@@ -23,7 +18,8 @@ unsigned char tempRendah(){
     return rendah;
 }
 
-unsigned char tempTinggi(){
+float tempTinggi(int temp){
+    float tinggi;
     if (temp >= 25 && temp <= 30) {tinggi = (temp - 25) / 5;}
     else if (temp >=30 && temp <= 35) {tinggi = (35 - temp) / 5;}
     else if (temp >= 35) {tinggi = 0;}
@@ -31,21 +27,24 @@ unsigned char tempTinggi(){
     return tinggi;
 }
 
-unsigned char tempSangatTinggi(){
+float tempSangatTinggi(int temp){
+    float sangatTinggi;
     if (temp >= 30 && temp <= 35) {sangatTinggi = (temp - 30) / 5;}
     else if (temp >= 35) {sangatTinggi = 1;}
     else if (temp <= 30) {sangatTinggi = 0;}
     return sangatTinggi;
 }
 
-unsigned char occupancySedikit(){
+float occupancySedikit(int occupancy){
+    float sedikit;
     if (occupancy <= 10) {sedikit = 1;}
     else if (occupancy >= 10 && occupancy <= 15) {sedikit = (15 - occupancy) / 5;}
     else if (occupancy >= 15) {sedikit = 0;}
     return sedikit;
 }
 
-unsigned char occupancySedang(){
+float occupancySedang(int occupancy){
+    float sedang;
     if (occupancy <= 10) {sedang = 0;}
     else if (occupancy >= 10 && occupancy <= 15) {sedang = (occupancy - 10) / 5;}
     else if (occupancy >= 15 && occupancy <= 20) {sedang = 1;}
@@ -54,7 +53,8 @@ unsigned char occupancySedang(){
     return sedang;
 }
 
-unsigned char occupancyBanyak(){
+float occupancyBanyak(int occupancy){
+    float banyak;
     if (occupancy <= 20) {banyak = 0;}
     else if (occupancy >= 20 && occupancy <= 30) {banyak = (occupancy - 20) / 10;}
     else if (occupancy >= 30) {banyak = 1;}
@@ -78,19 +78,19 @@ float classifySejuk(float alphaPredicate){
 }
 
 
-// Fuzzifikasi
-void fuzzification() {
-    tempSangatRendah();
-    tempRendah();
-    tempTinggi();
-    tempSangatTinggi();
-    occupancySedikit();
-    occupancySedang();
-    occupancyBanyak();
-}
+//// Fuzzifikasi
+//void fuzzification() {
+//    tempSangatRendah();
+//    tempRendah();
+//    tempTinggi();
+//    tempSangatTinggi();
+//    occupancySedikit();
+//    occupancySedang();
+//    occupancyBanyak();
+//}
 
 // Rule
-float fuzzy_rule(){
+float fuzzy_rule(float sangatRendah, float rendah, float tinggi, float sangatTinggi, float sedikit, float sedang, float banyak){
     const int rows = 4;
     const int cols = 3;
     #define SEDIKIT 0
@@ -104,7 +104,7 @@ float fuzzy_rule(){
     #define SEJUK 8
     #define DINGIN 9
 
-    float outTemp;
+//    float outTemp;
     // rule base dari tabel 8.3.1 yang di C251
     // langsung dihitung nilai alpha predicatenya
     // float ruleBase[rows][cols] = {
@@ -140,17 +140,21 @@ float fuzzy_rule(){
             sumAlpha += ruleBase[i][j];
         }
     }
-    float rerataTerbobot = sumZAlpha / sumAlpha;
-    outTemp = rerataTerbobot;
-    return outTemp;
+    int rerataTerbobot = floor(sumZAlpha / sumAlpha);
+//    outTemp = rerataTerbobot;
+    return rerataTerbobot;;
 }
 
 
-float getTemperature(float currentTemp, float CurrentOccupancy){
+float getTemperature(float currentTemp, float currentOccupancy){
     float outTemp;
-    temp = currentTemp;
-    occupancy = CurrentOccupancy;
-    fuzzification();
-    outTemp = fuzzy_rule();
+    float sangatRendah = tempSangatRendah(currentTemp);
+    float rendah = tempRendah(currentTemp);
+    float tinggi = tempTinggi(currentTemp);
+    float sangatTinggi = tempSangatTinggi(currentTemp);
+    float sedikit = occupancySedikit(currentOccupancy);
+    float sedang = occupancySedang(currentOccupancy);
+    float banyak = occupancyBanyak(currentOccupancy);
+    outTemp = fuzzy_rule(sangatRendah, rendah, tinggi, sangatTinggi, sedikit, sedang, banyak);
     return outTemp;
 }

@@ -1,20 +1,12 @@
-String  roomTemp_send = "027.00";
-String  counter_send = "100.00";
-String acTemp_send = "026.00";
-
 #include <SoftwareSerial.h>
 #include <Arduino.h>
 #include "sendToEsp.h"
 
+String  roomTemp_send = "027.00";
+String  counter_send = "100.00";
+String  acTemp_send = "026.00";
 
-void sendToESP(int occupancy, float roomtemp, float acTemp){
-//  Serial.print(roomtemp); Serial.print("\t");
-//  Serial.println(orang); Serial.print("\t");
-//  Serial.print(acTemp);
- 
- // String dataAll = String(orang) + "," + String(acTemp);
- // Serial.println(dataAll);
-
+void sendToESP(int occupancy, float roomTemp, float acTemp,SoftwareSerial NanoSerial){
   if (occupancy < 10){
       counter_send = "00" + String(occupancy) + ".00";
   }
@@ -30,7 +22,7 @@ void sendToESP(int occupancy, float roomtemp, float acTemp){
  Serial.println(acTemp_send);
  
  NanoSerial.print(counter_send); NanoSerial.print("%");
- NanoSerial.print(roomtemp_send); NanoSerial.print("%");
+ NanoSerial.print(roomTemp_send); NanoSerial.print("%");
  NanoSerial.print(acTemp_send); NanoSerial.print("\n");
  
  delay(100);
