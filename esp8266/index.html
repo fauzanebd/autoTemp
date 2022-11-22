@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Welcome to A-14 Webserver</title>
+    <!-- <link rel="stylesheet" href="style.css" /> -->
+  </head>
+  <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        }
+
+        body {
+        font-family: "Roboto", sans-serif;
+        }
+
+        [class*="col-"] {
+        float: left;
+        padding: 15px;
+        }
+        /* For mobile phones: */
+        [class*="col-"] {
+        width: 100%;
+        }
+
+        @media only screen and (min-width: 600px) {
+        /* For tablets: */
+        .col-s-1 {width: 8.33%;}
+        .col-s-2 {width: 16.66%;}
+        .col-s-3 {width: 25%;}
+        .col-s-4 {width: 33.33%;}
+        .col-s-5 {width: 41.66%;}
+        .col-s-6 {width: 50%;}
+        .col-s-7 {width: 58.33%;}
+        .col-s-8 {width: 66.66%;}
+        .col-s-9 {width: 75%;}
+        .col-s-10 {width: 83.33%;}
+        .col-s-11 {width: 91.66%;}
+        .col-s-12 {width: 100%;}
+        }
+        @media only screen and (min-width: 768px) {
+        /* For desktop: */
+        .col-1 {width: 8.33%;}
+        .col-2 {width: 16.66%;}
+        .col-3 {width: 25%;}
+        .col-4 {width: 33.33%;}
+        .col-5 {width: 41.66%;}
+        .col-6 {width: 50%;}
+        .col-7 {width: 58.33%;}
+        .col-8 {width: 66.66%;}
+        .col-9 {width: 75%;}
+        .col-10 {width: 83.33%;}
+        .col-11 {width: 91.66%;}
+        .col-12 {width: 100%;}
+        }
+        /* Navbar */
+
+        .nav-container {
+        background: #fffffa;
+        box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+        /* height: 80px; */
+        margin-top: 0px;
+        z-index: 500;
+        position: relative;
+        }
+
+        .wrapper {
+        /* width: 1200px; */
+        margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* height: 72px; */
+        }
+
+
+        .logo {
+        font-family: "Poppins", sans-serif;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 36px;
+        color: rgba(66, 142, 255, 1);
+        margin-left: 10%;
+        }
+        .logo p {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 0px;
+            color: #021718;
+            /* width: 418px; */
+            margin-top: 24px;
+            margin-bottom: 4px;
+        }
+        span.title-main {
+            font-family: 'Poppins', sans-serif;
+            font-style: normal;
+            font-weight: 800;
+            font-size: 40px;
+            margin: 0px 8px;
+            color: #FF1616;
+        }
+
+
+        /* Page Content */
+
+        .header-container {
+        background: rgb(33, 68, 120);
+        height: calc(100vh - 72px);
+        display: flex;
+        align-items: center;
+        }
+
+        header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-left: 4%;
+        }
+
+        header h1 {
+        font-weight: 900;
+        font-size: 36px;
+        line-height: 75px;
+        color: #0f1a92;
+        margin-bottom: 4px;
+        }
+
+        header p {
+        font-size: 20px;
+        line-height: 0px;
+        color: #021718;
+        /* width: 418px; */
+        text-align: center;
+        margin-bottom: 24px;
+        }
+
+
+
+        /* card */
+
+
+        .row-card {
+        display: flex;
+        align-items: center;
+        align-content: center;
+        gap: 24px;
+        width: 100%;
+        content: "";
+        clear: both;
+        
+        }
+
+        .row-card .card{
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0px 40px;
+
+            width: 50%;
+            height: 50%;
+
+            background: #FFF4F4;
+            border: 1px solid #000000;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 25px;
+
+        }
+
+
+        .units-container{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0px 0px 0px 80px;
+            gap: 10px;
+            margin-top: -32px;
+            /* width: 362px;
+            height: 180px; */
+            margin-left: 20px;
+        }
+
+        .units-container .temp{
+            /* width: 200px;
+            height: 180px; */
+
+            font-family: "Poppins", sans-serif;
+            font-style: normal;
+            font-weight: 800;
+            font-size: 144px;
+            line-height: 216px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+
+            color: #2175F4;
+        }
+
+        .units{
+            /* width: 72px;
+            height: 83px; */
+
+            font-family: "Poppins", sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 72px;
+            line-height: 108px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-left: 8px;
+            margin-top: 32px;
+
+            color: #81B3FF;
+
+        }
+
+        .column-card .card-occupant{
+            box-sizing: border-box;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 0px;
+            margin-top: 24px;
+
+            width: 49%;
+            height: 50%;
+
+            background: #FFF4F4;
+            border: 1px solid #000000;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 25px;
+
+        }
+
+        .occupant{
+            /* width: 200px;
+            height: 180px; */
+
+            font-family: "Poppins", sans-serif;
+            font-style: normal;
+            font-weight: 800;
+            font-size: 144px;
+            line-height: 216px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+
+            color: #2175F4;
+
+        }
+
+        .units-occupant{
+            /* width: 72px;
+            height: 83px; */
+
+            font-family: "Poppins", sans-serif;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 36px;
+            line-height: 108px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-left: 0px;
+            margin-top: 12px;
+
+            color: #81B3FF;
+        }
+  </style>
+  <body>
+
+    <div class="nav-container">
+      <div class="wrapper">
+        <nav>
+          <div class="logo">
+            <p>AC Automation Webserver</p>
+            What is<span class="title-main">Currently Happening</span>in This Room?
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="header-container">
+      <div class="wrapper">
+        <header>
+            <div class="column-card">
+            <div class="row-card">
+                <div class="card">
+                    <h1>Room Temperature</h1>
+                    <p>at the moment</p>
+                    <div class="units-container">
+                        <span class="temp" id="room-temp">16</span>
+                        <sup class="units">&deg;C</sup>
+                    </div>
+                </div>
+                <div class="card">
+                    <h1>AC Temperature</h1>
+                    <p>at the moment</p>
+                    <div class="units-container">
+                        <span class="temp" id="ac-temp">22</span>
+                        <sup class="units">&deg;C</sup>
+                    </div>
+                </div>
+            </div>
+            <div class="card-occupant">
+                <h1>Room Occupancy</h1>
+                <p>at the moment</p>
+                <div class="units-container">
+                    <span class="occupant" id="occupancy">10</span>
+                    <sup class="units-occupant">people</sup>
+                </div>
+            </div>
+        </div>
+
+        </header>
+
+
+      </div>
+    </div>
+
+  </body>
+
+  <script>
+    setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("room-temp").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "/room-temp", true);
+    xhttp.send();
+    }, 10000 ) ;
+
+    setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("ac-temp").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "/ac-temp", true);
+    xhttp.send();
+    }, 10000 ) ;
+    setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("occupancy").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "/occupancy", true);
+    xhttp.send();
+    }, 10000 ) ;
+    
+    // setTimeout("location.reload(true);", 10000);
+
+  </script>
+</html>
